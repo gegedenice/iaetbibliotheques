@@ -1,0 +1,6 @@
+huggingface_hub
+numpy
+pandas
+requests
+streamlit
+Pillow
