@@ -1,0 +1,9 @@
+huggingface_hub
+langchain
+langchain-community
+langchain-nvidia-ai-endpoints
+numpy
+pandas
+requests
+streamlit
+ollama
