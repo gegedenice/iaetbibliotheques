@@ -7,3 +7,5 @@ pandas
 requests
 streamlit
 ollama
+groq
+langchain-groq

@@ -4,68 +4,70 @@ import os
 import streamlit as st
 from langchain_community.llms import Ollama
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
+from langchain_groq import ChatGroq
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
+from clients import OllamaClient, GroqClient
 
-st.set_page_config(page_title="Simple Inference Streamlit App using Ollama and Nvidia with Langchain framework")
+st.set_page_config(
+    page_title="QA Inference Streamlit App using Ollama, Nvidia and Groq with Langchain framework"
+)
 
 
 # Cache the header of the app to prevent re-rendering on each load
 @st.cache_resource
 def display_app_header():
     """Display the header of the Streamlit app."""
-    st.title("QA Inference with Ollama & Nvidia : Langchain")
-    st.subheader("ChatBot")
+    st.title("QA Inference with Ollama & Nvidia & Groq as LLMs providers")
+    st.subheader("ChatBot based on Langchain framework")
+
 
 # Display the header of the app
 display_app_header()
 
-# params
-ollama_base_url = "http://localhost:11434"
-nvidia_base_url = "https://integrate.api.nvidia.com/v1"
-
-
-# functions #############################
-def list_ollama_models():
-    url = f"{ollama_base_url}/api/tags"
-    response = requests.request("GET", url).text
-    return response
-
-
-def list_nvidia_models():
-    return ChatNVIDIA.get_available_models()
-
-
+# UI sidebar ##########################################
+st.sidebar.subheader("Models")
+# LLM
+llm_providers = {
+    "Local Ollama": "ollama",
+    "Cloud Nvidia": "nvidia",
+    "Cloud Groq": "groq",
+}
+# hard coded because models returned by NvidiaClient().list_models() are not well formed for Langchain ChatNVIDIA class
 llms_from_nvidia = [
     "ai-llama3-70b",
     "ai-mistral-large",
     "ai-gemma-7b",
     "ai-codellama-70b",
 ]
-# UI sidebar ##########################################
-st.sidebar.subheader("Models")
-# LLM
-llm_providers = {"Local Ollama": "ollama", "Remote Nvidia": "nvidia"}
-
 llm_provider = st.sidebar.radio(
     "Choose your LLM Provider", llm_providers.keys(), key="llm_provider"
 )
-if llm_provider == "Remote Nvidia":
+if llm_provider == "Local Ollama":
+    ollama_list_models = OllamaClient().list_models()
+    ollama_models = [x["name"] for x in ollama_list_models["models"]]
+    ollama_llm = st.sidebar.radio(
+        "Select your Ollama model", ollama_models, key="ollama_llm"
+    )  # retrive with st.session_state["ollama_llm"]
+elif llm_provider == "Cloud Nvidia":
     if nvidia_api_token := st.sidebar.text_input("Enter your Nvidia API Key"):
         os.environ["NVIDIA_API_KEY"] = nvidia_api_token
-        st.sidebar.info("nvidia auth ok")
+        st.sidebar.info("nvidia authentification ok")
         # nvidia_models = [model.model_name for model in list_nvidia_models() if (model.model_type == "chat") & (model.model_name is not None)] # list is false
         nvidia_models = llms_from_nvidia
         nvidia_llm = st.sidebar.radio(
-            "Choose your Nvidia LLM", nvidia_models, key="nvidia_llm"
+            "Select your Nvidia LLM", nvidia_models, key="nvidia_llm"
         )
     else:
         st.sidebar.warning("You must enter your Nvidia API key")
-elif llm_provider == "Local Ollama":
-    ollama_models = [x["name"] for x in json.loads(list_ollama_models())["models"]]
-    ollama_llm = st.sidebar.radio(
-        "Select model you would like to use", ollama_models, key="ollama_llm"
-    )  # retrive with st.session_state["ollama_llm"]
+elif llm_provider == "Cloud Groq":
+    if groq_api_token := st.sidebar.text_input("Enter your Groq API Key"):
+        st.sidebar.info("Groq authentification ok")
+        groq_list_models = GroqClient(api_key=groq_api_token).list_models()
+        groq_models = [x["id"] for x in groq_list_models["data"]]
+        groq_llm = st.sidebar.radio("Choose your Groq LLM", groq_models, key="groq_llm")
+    else:
+        st.sidebar.warning("You must enter your Groq API key")
 
 # LLM parameters
 st.sidebar.subheader("Parameters")
@@ -82,10 +84,23 @@ top_p = st.sidebar.slider(
 class LlmProvider:
     def __init__(self, provider):
         if provider == "ollama":
-            self.llm = Ollama(model=st.session_state["ollama_llm"])
+            self.llm = Ollama(
+                model=st.session_state["ollama_llm"],
+                temperature=st.session_state["temperature"],
+                max_tokens=st.session_state["max_tokens"],
+                top_p=st.session_state["top_p"],
+            )
         elif provider == "nvidia":
             self.llm = ChatNVIDIA(
                 model=st.session_state["nvidia_llm"],
+                temperature=st.session_state["temperature"],
+                max_tokens=st.session_state["max_tokens"],
+                top_p=st.session_state["top_p"],
+            )
+        elif provider == "groq":
+            self.llm = ChatGroq(
+                groq_api_key = groq_api_token,
+                model_name=st.session_state["groq_llm"],
                 temperature=st.session_state["temperature"],
                 max_tokens=st.session_state["max_tokens"],
                 top_p=st.session_state["top_p"],
@@ -107,10 +122,9 @@ if prompt := st.chat_input("What is up?"):
     with st.chat_message("user"):
         st.markdown(prompt)
     conversation = ConversationChain(
-        llm=LlmProvider(llm_providers[llm_provider]).llm,
+        llm=LlmProvider(llm_providers[st.session_state["llm_provider"]]).llm,
         memory=ConversationBufferMemory(),
     )
-
     response = f"Echo: {prompt}"
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
