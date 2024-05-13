@@ -32,7 +32,9 @@ class OllamaClient:
         payload = json.dumps(
             {
                 "model": self.model,
-                "messages": [{"role": "user", "content": prompt}],
+                "messages": [
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}],
                 "option": {
                     "num_ctx": self.options["max_tokens"],
                     "top_p": self.options["top_p"],
@@ -53,7 +55,9 @@ class OllamaClient:
         )
         completion = client.chat.completions.create(
             model=self.model,
-            messages=[{"role": "user", "content": prompt}],
+            messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}],
             temperature=options["temperature"],
             top_p=options["top_p"],
             max_tokens=options["max_tokens"],
@@ -83,7 +87,9 @@ class NvidiaClient:
         payload = json.dumps(
             {
                 "model": self.model,
-                "messages": [{"role": "user", "content": prompt}],
+                "messages": [
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}],
                 "temperature": options["temperature"],
                 "top_p": options["top_p"],
                 "max_tokens": options["max_tokens"],
@@ -101,7 +107,9 @@ class NvidiaClient:
         )
         completion = client.chat.completions.create(
             model=self.model,
-            messages=[{"role": "user", "content": prompt}],
+            messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}],
             temperature=self.options["temperature"],
             top_p=self.options["top_p"],
             max_tokens=self.options["max_tokens"],
@@ -131,7 +139,9 @@ class GroqClient:
         payload = json.dumps(
             {
                 "model": self.model,
-                "messages": [{"role": "user", "content": prompt}],
+                "messages": [
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}],
                 "temperature": options["temperature"],
                 "top_p": options["top_p"],
                 "max_tokens": options["max_tokens"],

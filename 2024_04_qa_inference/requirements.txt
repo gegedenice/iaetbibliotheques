@@ -9,3 +9,4 @@ streamlit
 ollama
 groq
 langchain-groq
+openai
