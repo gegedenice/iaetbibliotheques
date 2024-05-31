@@ -42,7 +42,7 @@ if llm_provider == "Local Ollama":
     else:
         st.sidebar.error('Ollama is not running')
 elif llm_provider == "Cloud Nvidia":
-    if nvidia_api_token := st.sidebar.text_input("Enter your Nvidia API Key"):
+    if nvidia_api_token := st.sidebar.text_input("Enter your Nvidia API Key", type="password"):
         st.sidebar.info("Nvidia authentification ok")
         nvidia_list_models = NvidiaClient().list_models() # api_key is not needed to list the available models
         nvidia_models = [x["id"] for x in nvidia_list_models["data"]]
@@ -52,7 +52,7 @@ elif llm_provider == "Cloud Nvidia":
     else:
         st.sidebar.warning("You must enter your Nvidia API key")
 elif llm_provider == "Cloud Groq":
-    if groq_api_token := st.sidebar.text_input("Enter your Groq API Key"):
+    if groq_api_token := st.sidebar.text_input("Enter your Groq API Key", type="password"):
         st.sidebar.info("Groq authentification ok")
         groq_list_models = GroqClient(api_key=groq_api_token).list_models()
         groq_models = [x["id"] for x in groq_list_models["data"]]

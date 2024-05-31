@@ -27,7 +27,7 @@ st.markdown(
 
 # UI sidebar ##########################################
 def ui_llm(provider):
-    if api_token := st.sidebar.text_input("Enter your API Key", key=f"API_{provider}"):
+    if api_token := st.sidebar.text_input("Enter your API Key", type="password", key=f"API_{provider}"):
         provider_models = llm_providers[st.session_state["llm_provider"]](
             api_key=api_token
         ).list_models_names()
@@ -192,7 +192,7 @@ def generate(system, prompt):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("assistant"):
         response = get_llm_response(
-            llm_providers[st.session_state["llm_provider"]], system, prompt
+            system, prompt
         )
         st.markdown(response)
         # Add assistant response to chat history

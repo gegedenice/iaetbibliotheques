@@ -17,7 +17,7 @@ display_app_header()
 
 # UI sidebar parameters ####################################
 st.sidebar.header("Loging")
-if hg_token :=st.sidebar.text_input('Enter your HF token'):
+if hg_token :=st.sidebar.text_input('Enter your HF token', type="password"):
     st.sidebar.info('Logged', icon="ℹ️") 
 else:
     st.sidebar.warning("enter your token")
