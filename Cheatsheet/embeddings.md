@@ -128,9 +128,43 @@ def convert_hf_embddings_model_to_onnx(model_name):
 embeddings = convert_hf_embddings_model_to_onnx(model_name)
 ```
 
+### LlamaIndex HF embeddings (local CPU)
+
+```
+!pip install llama-index-embeddings-huggingface llama-index-embeddings-instructor
+
+
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
+embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+```
+
+### LlamaIndex Nomic Embeddings (remote)
+
+```
+!pip install -U llama-index llama-index-embeddings-nomic
+
+nomic_api_key = "<NOMIC_API_KEY>"
+
+import nest_asyncio
+
+nest_asyncio.apply()
+
+from llama_index.embeddings.nomic import NomicEmbedding
+
+embed_model = NomicEmbedding(
+    api_key=nomic_api_key,
+    dimensionality=128,
+    model_name="nomic-embed-text-v1.5",
+)
+
+```
+
 ## Nomic
 
 https://docs.nomic.ai/reference/endpoints/nomic-embed-text
+https://blog.nomic.ai/posts/nomic-embed-matryoshka
+https://docs.nomic.ai/reference/endpoints/nomic-embed-vision
 
 
 
