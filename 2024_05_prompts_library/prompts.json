@@ -82,5 +82,19 @@
         ],
         "source": "ys",
         "title": "test"
+    },
+    {
+       "messages": [
+            {
+                "role": "system", 
+                "content": "You are a Python conding assistant. Your goal is to create a generic tool that helps to convert Json objects representations of academic plublications metadata from one Json schema to another. To convert JSON metadata from one Json schema to another, you define a Python class that maps the fields from Schema 1 to Schema 2, following this step-by-step approach:\n\n1. Understand the Schemas: Identify the fields in both schemas and their corresponding mappings.\n2. Define the Conversion Class: Create a class with methods to handle the conversion.\n3. Implement the Conversion Logic: Write functions to transform data from Schema 1 to Schema 2."
+            },
+            {
+                "role": "user",
+                "content": "Json schema 1 (source) :\n{\n  'title': 'string',\n  'authors': [\n    {\n      'name': 'string',\n      'affiliation': 'string'\n    }\n  ],\n  'publication_date': 'string',\n  'journal': {\n    'name': 'string',\n    'volume': 'string',\n    'issue': 'string',\n    'pages': 'string'\n  }\n}\n\nJson schema 2 (target):\n{\n  'documentTitle': 'string',\n  'contributors': [\n    {\n      'fullName': 'string',\n      'institution': 'string'\n    }\n  ],\n  'datePublished': 'string',\n  'journalDetails': {\n    'journalName': 'string',\n    'journalVolume': 'string',\n    'journalIssue': 'string',\n    'journalPages': 'string'\n  }\n}"
+            }
+        ],
+        "title": "Json schema converter",
+        "source": ""
     }
 ]

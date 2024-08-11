@@ -4,6 +4,32 @@ Pieces of code for free LLMs
 
 ## HuggingFace LLMs
 
+### Download 
+
+```
+!pip install huggingface-hub
+
+from huggingface_hub import snapshot_download, login
+
+HUGGINGFACEHUB_API_TOKEN = "<your_hf_token"
+login(HUGGINGFACEHUB_API_TOKEN)
+
+snapshot_download(repo_id="meta-llama/Meta-Llama-3-8B", cache_dir="<local_path>/Meta-Llama-3-8B", local_dir="<local_path>/Meta-Llama-3-8B")
+```
+
+### Use with transformers
+
+```
+!pip install transformers
+
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+model_path = "<local_path>/Meta-Llama-3-8B"
+
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = AutoModelForCausalLM.from_pretrained(model_path)
+```
+
 ### API d'inférence
 
 ```
@@ -25,7 +51,7 @@ def llm_query(prompt: str) -> List[Dict[str, Any]]:
 	"inputs": prompt,
 	"options":{"wait_for_model":True}
 }
-	response = requests.post(API_URL, headers=headers, json=payload)
+	response = requests.post(llm_api_url, headers=headers, json=payload)
 	return response.json()
 
 llm_query("what is AI ?")
@@ -103,7 +129,7 @@ class OllamaClient:
             ollama_additional_kwargs={"mirostat": 0},
         )
 
-    def llm(self):
+    def client_llm(self):
         return Ollama(model=self.model, base_url=self.base_url, request_timeout=120.0)
 		
 	def openai_api_chat_completion(self,prompt,**options):
@@ -149,9 +175,10 @@ class OllamaClient:
 ## Groq
 
 ```
-# pip install openai
+# pip install openai groq
 
 from openai import OpenAI
+from groq import Groq
 
 class GroqClient:
     def __init__(self, api_key=None, model=None):
@@ -168,7 +195,7 @@ class GroqClient:
         response = requests.request("GET", url, headers=self.headers)
         return response.json()
 
-    def llm(self):
+    def client_llm(self):
         return Groq(model=self.model, api_key=self.api_key)
 		
 	def openai_api_chat_completion(self,prompt,**options):
@@ -207,7 +234,6 @@ class GroqClient:
         )
         return completion.choices[0].message.content
 ```
-
 
 
 

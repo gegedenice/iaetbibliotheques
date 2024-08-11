@@ -26,18 +26,19 @@ trafilatura -u "https://projet2024.abes.fr/docs/2.4/projet2024"
 ### Helper for cleaning (too long) urls
 
 ```
-def clean_url(url):
+
+def get_pagename_from_cleaned_url(url):
     """
     The function `get_pagename_from_url` takes a URL as input and returns the last part of the URL after
     the last slash, with any non-alphabetic characters removed, and truncated to a maximum length of 100
     characters.
-
+    
     :param url: A string representing the URL of a webpage
     :type url: str
     :return: the cleaned pagename extracted from the given URL.
     """
-    pagename = url.rsplit("/", 1)[-1]
-    cleaned_pagename = re.sub("[^A-Z]", "", pagename, 0, re.IGNORECASE)
+    pagename = url.rsplit('/', 1)[-1]
+    cleaned_pagename = re.sub("[^A-Z]", "", pagename,0,re.IGNORECASE)
     # to avoid too long pagenames
     if len(cleaned_pagename) > 100:
         return cleaned_pagename[:100]
@@ -162,7 +163,7 @@ def load_urls_to_dirfiles(
     """
 	urls = sitemaps.sitemap_search(sitemap_url, target_lang="en")
     for url in urls:
-        page_name = get_pagename_from_url(url)
+        page_name = get_pagename_from_cleaned_url(url)
         downloaded = fetch_url(url)
         if downloaded is not None:
             result = extract(

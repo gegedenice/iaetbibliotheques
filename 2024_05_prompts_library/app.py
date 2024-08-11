@@ -198,6 +198,9 @@ def generate(system, prompt):
         # Add assistant response to chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
 
+def clear():
+    for key in st.session_state.keys():
+        del st.session_state[key]
 
 # UI main #####################################################
 
@@ -244,6 +247,9 @@ with tab1:
                     delete_prompt(f["title"])
                     st.rerun()
 with tab2:
+    # Clear chat history
+    if st.button("Clear Chatbot history", type="secondary"):
+        clear()
     # Initialize chat history
     if "messages" not in st.session_state:
         st.session_state.messages = []

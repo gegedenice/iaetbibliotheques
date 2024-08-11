@@ -10,13 +10,16 @@ Miscellaneous pieces of code
 #!pip install datasets
 
 from datasets import load_dataset
+import pandas as pd
+```
 
-dataset = load_dataset(
+```
+hal_dataset = load_dataset(
   "Geraldine/hal_univcotedazur_shs_articles_2013-2023",
   revision="main"  # tag name, or branch name, or commit hash
 )
 
-print(dataset)
+print(hal_dataset)
 
 # returns
 DatasetDict({
@@ -25,11 +28,29 @@ DatasetDict({
         num_rows: 2417
     })
 })
-
 # dataset to pandas dataframe
-hal_data = load_dataset("Geraldine/hal_univcotedazur_shs_articles_2013-2023", data_files="hal_data.csv")
-df = pd.DataFrame(hal_data["train"])
+df = pd.DataFrame(hal_dataset["train"])
 ```
+
+Ou directement
+
+```
+# dataset to pandas dataframe
+hal_dataset = load_dataset("Geraldine/hal_univcotedazur_shs_articles_2013-2023", data_files="hal_data.csv")
+df = pd.DataFrame(hal_dataset["train"])
+```
+
+Ou sur la branche refs/convert/parquert créée automatiquement par Huggingface après le dépôt
+
+```
+hal_dataset = load_dataset(
+  "Geraldine/hal_univcotedazur_shs_articles_2013-2023",
+  revision="refs/convert/parquet"  # tag name, or branch name, or commit hash
+)
+df = pd.DataFrame(hal_dataset["train"])
+```
+
+
 
 ### Avec le package huggingface_hub
 

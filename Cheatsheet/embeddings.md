@@ -115,8 +115,7 @@ embeddings.embed_query("Refonte de theses.fr : éclairage sur les choix informat
 ```
 from llama_index.embeddings.huggingface_optimum import OptimumEmbedding
 
-model_id = "BAAI/bge-small-en-v1.5"
-def store_optimum_model(model_id):
+model_name = "BAAI/bge-small-en-v1.5"
 
 def convert_hf_embddings_model_to_onnx(model_name):
     if not(os.path.exists(f"./hf_models/{model_name.partition('/')[2]}_onnx")):
@@ -165,6 +164,51 @@ embed_model = NomicEmbedding(
 https://docs.nomic.ai/reference/endpoints/nomic-embed-text
 https://blog.nomic.ai/posts/nomic-embed-matryoshka
 https://docs.nomic.ai/reference/endpoints/nomic-embed-vision
+
+### Images embeddings
+
+#### API
+
+```
+import requests
+
+NOMIC_API_KEY = "..."
+
+headers = {
+    "Authorization": f"Bearer {NOMIC_API_KEY}",
+    "Content-Type": "application/x-www-form-urlencoded"
+}
+
+data = {
+    "model": "nomic-embed-vision-v1.5",
+    "urls": ["https://static.nomic.ai/secret-model.png", "https://static.nomic.ai/secret-model-2.png"]
+}
+
+response = requests.post("https://api-atlas.nomic.ai/v1/embedding/image", headers=headers, data=data)
+
+print(response.text)
+```
+
+##### Client Python
+
+```
+! pip install nomic
+
+from nomic import embed
+import numpy as np
+
+output = embed.image(
+    images=[
+        "image_path_1.jpeg",
+        "image_path_2.png",
+    ],
+    model='nomic-embed-vision-v1.5',
+)
+
+print(output['usage'])
+embeddings = np.array(output['embeddings'])
+print(embeddings.shape)
+```
 
 
 
