@@ -132,7 +132,7 @@ class OllamaClient:
     def client_llm(self):
         return Ollama(model=self.model, base_url=self.base_url, request_timeout=120.0)
 		
-	def openai_api_chat_completion(self,prompt,**options):
+    def openai_api_chat_completion(self,prompt,**options):
         url = f"{self.base_url}/api/chat"
         options = options if options is not None else {"max_tokens":1024,"top_p":0.7,"temperature":0.7}
         payload = json.dumps(
@@ -153,7 +153,7 @@ class OllamaClient:
         response = requests.request("POST", url, headers=self.headers, data=payload)
         return response.json()["message"]["content"]
 		
-	def openai_client_chat_completion(self,prompt,**options):
+    def openai_client_chat_completion(self,prompt,**options):
         options = options if options is not None else {"max_tokens":1024,"top_p":0.7,"temperature":0.7}
         client = OpenAI(
             base_url=self.base_url,
