@@ -156,7 +156,7 @@ class OllamaClient:
     def openai_client_chat_completion(self,prompt,**options):
         options = options if options is not None else {"max_tokens":1024,"top_p":0.7,"temperature":0.7}
         client = OpenAI(
-            base_url=self.base_url,
+            base_url=f"{self.base_url}/v1",
             api_key=self.api_key,
         )
         completion = client.chat.completions.create(
