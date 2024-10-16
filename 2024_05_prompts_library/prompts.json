@@ -94,7 +94,36 @@
                 "content": "Json schema 1 (source) :\n{\n  'title': 'string',\n  'authors': [\n    {\n      'name': 'string',\n      'affiliation': 'string'\n    }\n  ],\n  'publication_date': 'string',\n  'journal': {\n    'name': 'string',\n    'volume': 'string',\n    'issue': 'string',\n    'pages': 'string'\n  }\n}\n\nJson schema 2 (target):\n{\n  'documentTitle': 'string',\n  'contributors': [\n    {\n      'fullName': 'string',\n      'institution': 'string'\n    }\n  ],\n  'datePublished': 'string',\n  'journalDetails': {\n    'journalName': 'string',\n    'journalVolume': 'string',\n    'journalIssue': 'string',\n    'journalPages': 'string'\n  }\n}"
             }
         ],
-        "title": "Json schema converter",
+        "title": "Json schema converter - Zero-shot",
         "source": ""
-    }
+    },	
+	 {
+       "messages": [
+            {
+                "role": "system", 
+                "content": "You are a named entities extractor and your task is to take the unstructured text provided and convert it into a well-organized array format using JSON. \nIdentify each named person and place entity mentioned in the text and use it as key-value in the JSON object. \nThe returned Json array must then look like : \n[ \n{'person': 'the person full name'},\n{'place': 'the place full name'} \n]"
+            },
+            {
+                "role": "user",
+                "content": "Musk was born in Pretoria to Maye (née Haldeman), a model, and Errol Musk, a businessman and engineer. Musk briefly attended the University of Pretoria before immigrating to Canada at the age of 18, acquiring citizenship through his Canadian-born mother. Two years later he matriculated at Queen's University at Kingston in Canada. Musk later transferred to the University of Pennsylvania and received bachelor's degrees in economics and physics. He moved to California in 1995 to attend Stanford University, but dropped out after two days and, with his brother Kimbal, co-founded the online city guide software company Zip2. The startup was acquired by Compaq for $307 million in 1999. That same year Musk co-founded X.com, a direct bank. X.com merged with Confinity in 2000 to form PayPal. In October 2002 eBay acquired PayPal for $1.5 billion. Using $100 million of the money he made from the sale of PayPal, Musk founded SpaceX, a spaceflight services company, in 2002."
+            }
+        ],
+        "title": "NER extraction - One-shot",
+        "source": ""
+    },
+	{
+       "messages": [
+            {
+                "role": "system", 
+                "content": "You are an AI assistant expert in indexing scientific publications with two disciplinary categories denominated in French 'Sciences physiques et astronomie' and 'Biologie fondamentale'.\nThe user gives as input the title of a publication and you answer contains as output the correct category to classify the article.\nEXAMPLES###\nHere are a few examples of classified titles:\nUser: Differential distribution of lipids in epidermis, gastrodermis and hosted Symbiodinium in the sea anemone Anemonia viridis\nAI: Biologie fondamentale\nUser: On the use of 31P NMR for the quantification of hydrosoluble phosphorus-containing compounds in coral host tissues and cultured zooxanthellae\nAI: Biologie fondamentale\nUser: A two-dimensional Riemann solver with self-similar sub-structure – Alternative formulation based on least squares projection\nAI: Sciences physiques et astronomie\nUser: Asteroid orbits with Gaia using random-walk statistical ranging\nAI: Sciences physiques et astronomie\nUser: THERMAP: a mid-infrared spectro-imager for space missions to small bodies in the inner solar system\nAI: Sciences physiques et astronomie\nUser: Ablation of the Stimulatory G Protein α-Subunit in Renal Proximal Tubules Leads to Parathyroid Hormone-Resistance With Increased Renal Cyp24a1 mRNA Abundance and Reduced Serum 1,25-Dihydroxyvitamin D\nAI: Biologie fondamentale\nUser: The necromass of the Posidonia oceanica seagrass meadow: fate, role, ecosystem services and vulnerability\nAI: Biologie fondamentale\nUser: Phylogeographic analysis of the brown algaCutleria multifida(Tilopteridales, Phaeophyceae) suggests a complicated introduction history\nAI: Biologie fondamentale\nUser: Fermionic current and Schwinger effect in de Sitter spacetime\nAI: Sciences physiques et astronomie\nUser: Comparison of semiclassical and Wigner function methods in pair production in rotating fields\nAI: Sciences physiques et astronomie\nUser: The size of the primary cilium and acetylated tubulin are modulated during adipocyte differentiation: Analysis of HDAC6 functions in these processes\nAI: Biologie fondamentale\nUser: Using optimality models to improve the efficacy of parasitoids in biological control programmes\nAI: Biologie fondamentale\nUser: The effect of CO2 and Nd:YAP lasers on CAD/CAM Ceramics: SEM, EDS and thermal studies\nAI: Sciences physiques et astronomie\nUser: A numerical investigation of coorbital stability and libration in three dimensions\nAI: Sciences physiques et astronomie\nUser: Dark matter as residual of topological changes\nAI: Sciences physiques et astronomie\nUser: Yeast2.0: a new chapter\nAI: Biologie fondamentale\nUser: Superlogic manifolds and geometric approach to quantum logic\nAI: Sciences physiques et astronomie\nUser: Generalized flyby trajectories around elongated minor celestial bodies as a rotating mass dipole\nAI: Sciences physiques et astronomie\nUser: GTC/CanariCam observations of (99942) Apophis\nAI: Sciences physiques et astronomie\nUser: A Critical Review of the Costs of Advertising: a Transformative Consumer Research Perspective\nAI: Biologie fondamentale\nUser: Super-catastrophic disruption of asteroids at small perihelion distances\nAI: Sciences physiques et astronomie\nUser: THE INFRARED SPECTRAL PROPERTIES OF MAGELLANIC CARBON STARS\nAI: Sciences physiques et astronomie\nUser: Fast inversion of Zeeman line profiles using central moments\nAI: Sciences physiques et astronomie\nUser: Geographic distance, water circulation and environmental conditions shape the biodiversity of Mediterranean rocky coasts\nAI: Biologie fondamentale\nUser: A DGTD method for the numerical modeling of the interaction of light with nanometer scale metallic structures taking into account non-local dispersion effects\nAI: Sciences physiques et astronomie\nUser: Molecular characterization ofWolbachiainfection in bed bugs (Cimex lectularius) collected from several localities in France\nAI: Biologie fondamentale\nUser: RISC-mediated control of selected chromatin regulators stabilizes ground state pluripotency of mouse embryonic stem cells\nAI: Biologie fondamentale\nUser: Thermal and menthol stress induce different cellular events during sea anemone bleaching\nAI: Biologie fondamentale\nUser: Born of Chaos\nAI: Biologie fondamentale\nUser: Schwinger effect and backreaction in de Sitter spacetime\nAI: Sciences physiques et astronomie\nUser: Chunk formation in immediate memory and how it relates to data compression\nAI: Biologie fondamentale\nUser: Reducing Stereotype Threat With Embodied Triggers\nAI: Biologie fondamentale\nUser: Inhomogeneous matter distribution and supernovae\nAI: Sciences physiques et astronomie\nUser: Successive Phases of the Metabolic Response to Stress\nAI: Biologie fondamentale"
+            },
+            {
+                "role": "user",
+                "content": "Classify the following titles into 'Sciences physiques et astronomie' or 'Biochimie fondamentale' : Immune Priming and Trans-Generational Protection From Parasites"
+            }
+        ],
+        "title": "Publications Classification - Few-shot",
+        "source": ""
+    },
+	
 ]
