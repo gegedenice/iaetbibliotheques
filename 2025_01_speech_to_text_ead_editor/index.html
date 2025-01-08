@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EAD/XML Editor</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-beautify.js"></script>
+  </head>
+  <body>
+    <div class="container mt-4">
+        <h2 class="text-center">AI-generated EAD/XML records with Speech-to-text command</h2>
+         <!-- Whisper loading -->
+        <div class="text-center" id="loadingSpinner" style="display: none;">
+          <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+          </div>
+          <p>Loading, please wait...</p>
+      </div>
+        <!-- Collapsible Documentation Section -->
+        <div>
+          <button class="btn btn-info" data-toggle="collapse" data-target="#documentation" aria-expanded="false" aria-controls="documentation">
+              Toggle Documentation
+          </button>
+          <button class="btn btn-info" data-toggle="collapse" data-target="#browserRequirements" aria-expanded="false" aria-controls="browserRequirements">
+            Browser Requirements (WebGPU)
+        </button>
+          <div class="collapse" id="documentation">
+              <div class="card card-body mt-2">
+                  <h5>Documentation</h5>
+                  <p>This application allows users to generate EAD/XML records using voice commands. 
+                  Users can record their instructions, highlight existing XML content to add context, 
+                  and send the combined prompt to the Ollama model for processing.</p>
+                  <p>To use the application:</p>
+                  <ul>
+                      <li>Click "Start Recording" to begin capturing your voice instructions (can be in french).</li>
+                      <li>Highlight any existing XML content and click "Add to Context" to include it in your prompt.</li>
+                      <li>Use the "Prettify XML" button to format your XML content.</li>
+                      <li>Click "Send Prompt" to generate the EAD/XML based on your instructions.</li>
+                  </ul>
+                  <p>This application utilizes the <a href="https://huggingface.co/Xenova/whisper-small" target="_blanck"><strong>Xenova/whisper-small</strong></a> model for audio transcription, which is implemented using <a href="https://huggingface.co/docs/transformers.js/index" target="_blanck"><strong>transformers.js</strong></a> and leverages <strong>WebGPU</strong> in the browser for efficient processing.</p>
+                  <p>For EAD generation, the application uses the <a href="https://huggingface.co/Geraldine/FineLlama-3.2-3B-Instruct-ead-GGUF" target="_blanck">Q5_K_M</a> quantized variant of the fine-tuned model <a href="https://huggingface.co/Geraldine/FineLlama-3.2-3B-Instruct-ead" target="_blanck"><strong>Geraldine/FineLlama-3.2-3B-Instruct-ead</strong></a>. This model is designed to understand and generate EAD/XML records based on the user’s instructions and context.</p>
+                  <p>See this <a href="https://iaetbibliotheques.fr/2024/12/comment-apprendre-lead-a-un-llm-fine-tuning-33" target="_blanck">blog post</a> for explanations on fine-tuning</p>
+                </div>
+          </div>
+
+      <div class="collapse" id="browserRequirements">
+        <div class="card card-body mt-2">
+            <h5>Browser Requirements for WebGPU</h5>
+            <p>To use the WebGPU features of this application, ensure that you are using a compatible browser. The following requirements must be met:</p>
+            <ul>
+                <li>Use a browser that supports WebGPU, such as the latest versions of:</li>
+                <ul>
+                    <li><a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a></li>
+                    <li><a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla Firefox</a></li>
+                    <li><a href="https://www.microsoft.com/en-us/edge" target="_blank">Microsoft Edge</a></li>
+                </ul>
+                <li>Ensure that <a href="https://caniuse.com/webgpu" target="_blanck">WebGPU is enabled</a> in your browser settings.</li>
+                <li>Check for any experimental features that may need to be enabled for WebGPU support.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+      <hr>
+
+        <div class="controls mb-3">
+            <button id="startRecording" class="btn btn-primary">Start Recording</button>
+            <button id="stopRecording" class="btn btn-danger" disabled>Stop Recording</button>
+            <button id="prettifyXML" class="btn btn-secondary">Prettify XML</button>
+            <button id="sendPrompt" class="btn btn-success">Send Prompt</button>
+            <div id="status" class="status mt-2"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h3>User Prompt</h3>
+                <textarea id="transcription" class="form-control" rows="5" placeholder="Transcription will appear here..."></textarea>
+            </div>
+            <div class="col-md-6">
+                <h3>Context</h3>
+                <div id="context" class="border p-2" style="height: 200px; overflow-y: auto;"></div>
+            </div>
+        </div>
+        <div id="editor" class="editor mt-4"></div>
+    </div>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>

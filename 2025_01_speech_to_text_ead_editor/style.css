@@ -1,0 +1,19 @@
+body {
+  background-color: #f8f9fa; /* Light background color */
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.editor {
+  height: 500px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#contextMenu {
+  display: none; /* Initially hidden */
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}

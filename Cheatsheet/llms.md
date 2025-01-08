@@ -98,7 +98,7 @@ llm = HuggingFaceEndpoint(
 Based on the OpenAI client and Inference API 
 
 ```
-!pip install openai
+!pip install openai requests pandas
 ```
 
 ```

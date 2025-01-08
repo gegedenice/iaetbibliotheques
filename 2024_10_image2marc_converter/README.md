@@ -1,6 +1,8 @@
 #  Streamlit prototype : Image to Marc record with LLM & VLM
 
-> Post : [https://iaetbibliotheques.fr/2024/05/comment-executer-localement-un-llm-22](https://iaetbibliotheques.fr/2024/05/comment-executer-localement-un-llm-22)
+> Post : [https://iaetbibliotheques.fr/2024/10/extraction-de-donnees-structurees-avec-des-llms)
+
+> Deployed : no
 
 ## How it works
 

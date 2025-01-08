@@ -1,0 +1,10 @@
+chromadb
+joblib
+langchain
+langchain-chroma
+langchain-groq
+langchain-ollama
+scikit-learn
+streamlit
+torch
+transformers
