@@ -204,4 +204,10 @@ print(dataset['input_ids'].shape)
 print(type(dataset[0]["input_ids"]))
 ```
 
+## Calculate the minimum required GPU memory per LLM
+
+Source : https://gist.github.com/philschmid/d188034c759811a7183e7949e1fa0aa4
+
+
+
 

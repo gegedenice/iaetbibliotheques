@@ -6,6 +6,8 @@ Pieces of code for free LLMs
 
 ### Download 
 
+#### Huggingface_hub
+
 ```
 !pip install huggingface-hub
 
@@ -16,8 +18,23 @@ login(HUGGINGFACEHUB_API_TOKEN)
 
 snapshot_download(repo_id="meta-llama/Meta-Llama-3-8B", cache_dir="<local_path>/Meta-Llama-3-8B", local_dir="<local_path>/Meta-Llama-3-8B")
 ```
+#### Huggingface-cli
+
+*with huggingface-hub library*
+
+```
+huggingface-cli download bartowski/MiniCPM-V-2_6-GGUF --include "MiniCPM-V-2_6-Q4_K_M.gguf" --local-dir ./
+```
+
+#### wget
+
+```
+wget https://huggingface.co/unsloth/DeepSeek-R1-Distill-Qwen-1.5B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-1.5B-Q8_0.gguf -P <folder_path>/
+```
 
 ### Use with transformers
+
+Full model 
 
 ```
 !pip install transformers
@@ -28,6 +45,17 @@ model_path = "<local_path>/Meta-Llama-3-8B"
 
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model = AutoModelForCausalLM.from_pretrained(model_path)
+```
+Quantizied model
+
+```
+model_id = "openbmb/MiniCPM-o-2_6-gguf"
+filename = "Model-7.6B-Q4_0.gguf"
+
+tokenizer = AutoTokenizer.from_pretrained(model_id, gguf_file=filename, trust_remote_code=True)
+model = AutoModel.from_pretrained(model_id,
+    gguf_file=filename,
+)
 ```
 
 ### API d'inférence

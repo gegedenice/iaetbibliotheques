@@ -1,0 +1,17 @@
+pandas
+numpy
+dash
+dash-bootstrap-components
+plotly
+datasets
+pillow
+transformers
+sentence-transformers
+einops
+lancedb
+requests
+umap-learn
+scikit-learn
+hdbscan
+git+https://github.com/gegedenice/omeka-s-api-client.git
+python-dotenv

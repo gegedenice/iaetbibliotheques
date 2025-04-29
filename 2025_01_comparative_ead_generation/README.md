@@ -1,8 +1,8 @@
 # EAD Generation App
 
-> Post : [https://iaetbibliotheques.fr/2024/11/comment-apprendre-lead-a-un-llm)
+> Post : [https://iaetbibliotheques.fr/2024/11/comment-apprendre-lead-a-un-llm](https://iaetbibliotheques.fr/2024/11/comment-apprendre-lead-a-un-llm)
 
-> Deployed : [https://huggingface.co/spaces/Geraldine/comparative-ead-generation]
+> Deployed : [https://huggingface.co/spaces/Geraldine/comparative-ead-generation](https://huggingface.co/spaces/Geraldine/comparative-ead-generation)
 
 ![](screenshot.png)
 
