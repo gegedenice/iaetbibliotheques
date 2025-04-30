@@ -72,8 +72,8 @@ app.layout = html.Div([
 
                         # Tabs
                         dcc.Tabs(id="data-tabs", value="api", children=[
-                            dcc.Tab(label="From Omeka S", value="omeka"),
-                            dcc.Tab(label="From LanceDB", value="lance")
+                            dcc.Tab(label="Harvest data from Omeka S", value="omeka"),
+                            dcc.Tab(label="Visualize existing collections", value="lance")
                         ]),
 
                         html.Div(id="data-tab-content"),
@@ -250,7 +250,7 @@ def render_tab_content(tab):
     if tab == "omeka":
         return html.Div([
             html.Div([
-                html.H5("From Omeka S", className="mb-3"),
+                html.H5("Harvest data from an Omeka S instance", className="mb-3"),
                 # API URL input with full width
                 dbc.InputGroup([
                     dbc.Input(
@@ -309,13 +309,21 @@ def render_tab_content(tab):
             ], className="p-3"),
         ], className="border rounded bg-white shadow-sm")
     elif tab == "lance":
+        # Get tables at runtime
+        tables = manager.list_tables()
         return html.Div([
-            html.H5("From LanceDB"),
-            dbc.Button("Load LanceDB tables", id="load-tables", color="link", size="sm", className="mt-2"),
-            dcc.Dropdown(id="db-tables-dropdown", placeholder="Select an existing table"),
-            dbc.Button("Display Table", id="load-data-db", color="success", size="sm", className="mt-2"),
-            dbc.Button("Drop Table", id="drop-data-db", color="danger", size="sm", className="mt-2"),            
-        ])
+            html.H5("From LanceDB", className="mb-3"),
+            html.Div([
+                dbc.RadioItems(
+                    id="db-tables-radio",
+                    options=[{"label": t, "value": t} for t in tables],
+                    value=tables[0] if tables else None,
+                    className="mb-3"
+                ),
+                dbc.Button("Display Table", id="load-data-db", color="success", size="sm", className="me-2"),
+                dbc.Button("Drop Table", id="drop-data-db", color="danger", size="sm"),
+            ]) if tables else html.P("No tables available in LanceDB", className="text-muted"),
+        ], className="border rounded bg-white shadow-sm p-3")
 
     return html.Div("Invalid tab selected.")
 
@@ -371,18 +379,6 @@ def load_item_sets(n_clicks, base_url):
         }
     except Exception as e:
         return dash.no_update, dash.no_update
-
-## -------------------- Load LanceDB tables callback--------------------
-@app.callback(
-    Output("db-tables-dropdown", "options", allow_duplicate=True),
-    Input("load-tables", "n_clicks"),
-    prevent_initial_call=True
-)
-def list_tables(n_clicks):
-    if not n_clicks:
-        raise PreventUpdate
-    tables = manager.list_tables()
-    return [{"label": t, "value": t} for t in tables]
 
 ## -------------------- Load & Process Omeka items callback--------------------
 @app.callback(
@@ -457,7 +453,7 @@ def handle_omeka_data(n_clicks, item_set_id, client_config, table_name):
     Output("umap-graph", "figure", allow_duplicate=True),
     Output("status", "children", allow_duplicate=True),
     Input("load-data-db", "n_clicks"),
-    State("db-tables-dropdown", "value"),
+    State("db-tables-radio", "value"), 
     prevent_initial_call=True
 )
 def handle_db_data(n_clicks, db_table):
@@ -500,7 +496,7 @@ def show_point_details(hoverData):
     Input("search-button", "n_clicks"),
     Input("search-limit-slider", "value"),  # Add slider input
     State("search-input", "value"),
-    State("db-tables-dropdown", "value"),
+    State("db-tables-radio", "value"),
     State("umap-graph", "figure"),
     prevent_initial_call=True
 )
@@ -568,30 +564,27 @@ def clear_search(n_clicks, current_fig):
     
     return fig, ""  # Return cleared figure and empty search input
 
-## -------------------- Load LanceDB data callback--------------------
+## -------------------- Drop table callback--------------------
 @app.callback(
     Output("db-tables-dropdown", "options",allow_duplicate=True),  # Update dropdown options
     Output("status", "children",allow_duplicate=True),  # Show status message
-    Output("db-tables-dropdown", "value",allow_duplicate=True),  # Clear current selection
     Input("drop-data-db", "n_clicks"),
-    State("db-tables-dropdown", "value"),
+    State("db-tables-radio", "value"),
+    State("data-tabs", "value"),
     prevent_initial_call=True
 )
-def drop_db_data(n_clicks, db_table):
+def drop_db_data(n_clicks, db_table, current_tab):
     if not n_clicks or not db_table:
         raise PreventUpdate
         
     try:
-        # Delete the table
         success = manager.drop_table(db_table)
         
         if success:
-            # Get updated list of tables
-            tables = manager.list_tables()
-            options = [{"label": t, "value": t} for t in tables]
-            return options, f"Table '{db_table}' successfully deleted", None
+            # Re-render the entire tab content to show updated radio buttons
+            return render_tab_content("lance"), f"Table '{db_table}' successfully deleted"
         else:
-            return dash.no_update, f"Failed to delete table '{db_table}'", dash.no_update
+            return dash.no_update, f"Failed to delete table '{db_table}'"
             
     except Exception as e:
         print(f"Error dropping table: {str(e)}")
