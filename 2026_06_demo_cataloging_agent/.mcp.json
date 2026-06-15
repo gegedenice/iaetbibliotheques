@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+	  "sudoc": {
+      "command": "uv",
+      "args": [
+        "run",
+        "https://raw.githubusercontent.com/smartbiblia-solutions/agentic-stack/main/mcp/sudoc-sru/mcp_server.py",
+        "--transport", "stdio"
+      ]
+    },
+	"unimarc": {
+      "command": "uv",
+      "args": [
+        "run",
+        "./tools/valider_notice_unimarc/mcp_server.py"
+      ]
+    }
+  }
+}
